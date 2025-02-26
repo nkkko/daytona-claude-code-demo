@@ -1,0 +1,481 @@
+---
+title: Configuration
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Label>
+  Distribution: **Open Source**
+</Label>
+
+The Daytona SDK provides flexible configuration options to customize its behavior and connection settings.
+
+## Configuration Options
+
+Daytona SDK provides an option to configure settings using the `DaytonaConfig` class in Python and TypeScript. The `DaytonaConfig` class accepts the following parameters:
+
+- `api_key`: Your Daytona API key
+- `server_url`: URL of your Daytona server
+- `target`: Daytona Target to create the Sandboxes on.
+
+<Tabs>
+<TabItem label="Python" icon="seti:python">
+```python
+from daytona_sdk import DaytonaConfig
+
+config = DaytonaConfig(
+    api_key="your-api-key",
+    server_url="your-server-url",
+    target="local"
+)
+
+```
+</TabItem>
+<TabItem label="TypeScript" icon="seti:typescript">
+```typescript
+import { DaytonaConfig } from '@daytonaio/sdk';
+
+const config: DaytonaConfig = {
+    apiKey: "your-api-key",          
+    serverUrl: "your-server-url",     
+    target: "local"                  
+};
+```
+
+</TabItem>
+</Tabs>
+
+## Environment Variables
+
+Daytona SDK supports environment variables for configuration. The SDK automatically looks for these environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| **`DAYTONA_API_KEY`** | Your Daytona API key. | None |
+| **`DAYTONA_SERVER_URL`** | URL of your Daytona server. | None |
+| **`DAYTONA_TARGET`** | Daytona Target to create the Sandboxes on. | "local" |
+
+### Setting Environment Variables
+
+Daytona SDK can read configuration from environment variables. You can set these environment variables using the following methods:
+
+- [Using a **`.env`** file](#using-a-env-file)
+- [Using Shell Environment](#using-shell-environment)
+
+#### Using a **`.env`** File
+
+Create a `.env` file in your project root directory:
+
+```bash
+DAYTONA_API_KEY=your-api-key
+DAYTONA_SERVER_URL=https://your-server-url
+DAYTONA_TARGET=local
+```
+
+- `DAYTONA_API_KEY`: Your Daytona API key.
+- `DAYTONA_SERVER_URL`: URL of your Daytona server.
+- `DAYTONA_TARGET`: Daytona Target to create the Sandboxes on.
+
+#### Using Shell Environment
+
+Set environment variables in your shell:
+
+<Tabs>
+<TabItem label="Bash/Zsh" icon="seti:shell">
+```bash
+export DAYTONA_API_KEY=your-api-key
+export DAYTONA_SERVER_URL=https://your-server-url
+```
+</TabItem>
+<TabItem label="Windows PowerShell" icon="seti:powershell">
+```bash
+$env:DAYTONA_API_KEY="your-api-key"
+$env:DAYTONA_SERVER_URL="https://your-server-url"
+```
+</TabItem>
+</Tabs>
+
+## Configuration Precedence
+
+The SDK uses the following precedence order for configuration (highest to lowest):
+
+1. Explicitly passed configuration in code.
+2. Environment variables.
+3. Configuration file.
+4. Default values.
+
+---
+title: Getting Started
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Label>
+  Distribution: **Open Source**
+</Label>
+
+The Daytona SDK provides official Python and TypeScript interfaces for interacting with Daytona, enabling you to programmatically manage development environments and execute code.
+
+View the Daytona SDK repository on [GitHub](https://github.com/daytonaio/sdk).
+
+Follow the step by step guide to create and run your first Daytona Sandbox for an AI Agent.
+
+## Install Daytona
+
+Install Daytona by following the [installation instructions](https://www.daytona.io/docs/installation/installation/). If you have Beta access to the Daytona platform, create an account and log in.
+
+## Set Up Your Environment Variables
+
+To authenticate with Daytona, you need an API key. You can obtain an API key from the Daytona platform or generate one using the Daytona CLI.
+
+<Tabs>
+<TabItem label="Cloud">
+
+1. Navigate to the Daytona platform.
+2. Go to API Keys.
+3. Click the **`Create Key`** button.
+4. Paste the API key in your **`.env`** file.
+
+</TabItem>
+<TabItem label="OSS">
+1. Type the following command:
+
+```bash
+daytona api-key generate
+```
+
+2. Paste the API key in your **`.env`** file.
+</TabItem>
+
+</Tabs>
+
+## Install the Daytona SDK
+
+Daytona provides official Python and TypeScript SDKs for interacting with the Daytona platform. Install the SDK using your preferred method.
+
+<Tabs>
+<TabItem label="Python" icon="seti:python">
+```bash
+pip install daytona-sdk
+```
+</TabItem>
+<TabItem label="TypeScript" icon="seti:typescript">
+```bash
+# Using npm
+npm install @daytonaio/sdk
+
+# Using yarn
+
+yarn add @daytonaio/sdk
+
+# Using pnpm
+
+pnpm add @daytonaio/sdk
+
+```
+</TabItem>
+</Tabs>
+
+## Write Code to Create a Sandbox
+
+Create and run your code within Daytona Sandboxes using the SDK. Daytona provides a simple and intuitive interface for interacting with Daytona.
+
+Use the Daytona SDK [Python examples](https://github.com/daytonaio/sdk/tree/main/examples/python) or [TypeScript/JavaScript examples](https://github.com/daytonaio/sdk/tree/main/examples/typescript) to create a Sandbox and run your code.
+
+### Execute Commands
+
+Run the following code to create a Daytona Sandbox and execute commands:
+
+<Tabs>
+<TabItem label="Python" icon="seti:python">
+```python
+from daytona_sdk import Daytona, CreateWorkspaceParams
+
+# Initialize the Daytona client
+daytona = Daytona()
+
+# Create the Sandbox instance
+params = CreateWorkspaceParams(language="python")
+workspace = daytona.create(params)
+
+# Run the code securely inside the Sandbox
+response = workspace.process.code_run('print("Sum of 3 and 4 is " + str(3 + 4))')
+if response.exit_code != 0:
+    print(f"Error running code: {response.exit_code} {response.result}")
+else:
+    print(response.result)
+
+# Clean up the Sandbox
+daytona.remove(workspace)
+
+```
+
+</TabItem>
+<TabItem label="TypeScript" icon="seti:typescript">
+```typescript
+import { Daytona } from '@daytonaio/sdk'
+
+async function main() {
+  // Initialize the Daytona client
+  const daytona = new Daytona()
+
+  try {
+    // Create the workspace instance
+    const workspace = await daytona.create({
+      language: 'python',
+    })
+    // Run the code securely inside the workspace
+    const response = await workspace.process.codeRun(
+      'print("Sum of 3 and 4 is " + str(3 + 4))',
+    )
+    if (response.exitCode !== 0) {
+      console.error('Error running code:', response.exitCode, response.result)
+    } else {
+      console.log(response.result)
+    }
+  } catch (error) {
+    console.error('Workspace flow error:', error)
+  } finally {
+    // Clean up the workspace
+    await daytona.remove(workspace)
+  }
+}
+
+main()
+
+```
+</TabItem>
+</Tabs>
+
+## Start your Sandbox
+
+Daytona provides two methods for starting your Sandbox:
+
+- Using Python
+- Using TypeScript/JavaScript
+
+Choose the appropriate method based on your preferred language.
+
+<Tabs>
+<TabItem label="Python" icon="seti:python">
+```bash
+python main.py
+```
+
+</TabItem>
+<TabItem label="TypeScript" icon="seti:typescript">
+```bash
+npx tsx ./index.ts
+```
+</TabItem>
+</Tabs>
+
+---
+title: Daytona Documentation
+description: Start managing your Sandboxes with Daytona.
+template: doc
+head:
+  - tag: title
+    content: Documentation · Daytona
+  - tag: meta
+    attrs:
+        property: og:title
+        content: Documentation · Daytona
+  - tag: meta
+    attrs:
+        name: twitter:title
+        content: Documentation · Daytona
+tableOfContents: false
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Label>
+  Distribution: **Open Source**
+</Label>
+
+The Daytona SDK provides official Python and TypeScript interfaces for interacting with Daytona, enabling you to programmatically manage development environments and execute code.
+
+### Quick Start
+
+<Tabs>
+  <TabItem label="Python" icon="seti:python">
+
+  ```bash
+  pip install daytona_sdk
+  ```
+
+  ```python
+  from daytona_sdk import Daytona, DaytonaConfig
+
+  # Define the configuration
+  config = DaytonaConfig(
+    api_key="your-api-key",
+    server_url="your-server-url",
+    target="us"
+  )
+
+  # Initialize the Daytona client
+  daytona = Daytona(config)
+
+  # Create the Sandbox instance
+  workspace = daytona.create()
+
+  # Run the code securely inside the Sandbox
+  response = workspace.process.code_run('print("Hello World from code!")')
+  if response.exit_code != 0:
+    print(f"Error: {response.exit_code} {response.result}")
+  else:
+      print(response.result)
+  
+  daytona.remove(workspace)
+  ```
+
+  </TabItem>
+
+  <TabItem label="TypeScript" icon="seti:typescript">
+
+  ```bash
+  npm install @daytonaio/sdk
+  ```
+
+  ```typescript
+  import { Daytona } from '@daytonaio/sdk';
+
+  // Initialize the Daytona client
+  const daytona = new Daytona({
+    apiKey: 'your-api-key',
+    serverUrl: 'your-server-url',
+    target: 'us'
+  });
+
+  // Create the Sandbox instance
+  const workspace = await daytona.create({
+    language: 'typescript',
+  });
+
+  // Run the code securely inside the Sandbox
+  const response = await workspace.process.codeRun('console.log("Hello World from code!")')
+  console.log(response.result);
+  ```
+
+  </TabItem>
+</Tabs>
+
+<DocumentList title="About">
+  <DocumentListItem
+    title="Getting Started"
+    subtitle="Learn about Daytona SDK and how it can help you manage your development environments."
+    href="/docs/getting-started"
+  />
+  <DocumentListItem
+    title="Configuration"
+    subtitle="Get started with Daytona SDK and learn how to use and configure your development environments."
+    href="/docs/configuration"
+  />
+  <DocumentListItem
+    title="Sandbox Persistence"
+    subtitle="Learn about sandbox persistence and how it can help you manage your development environments."
+    href="/docs/sandbox-persistence"
+  />
+</DocumentList>
+
+<DocumentList title="Python SDK">
+  <DocumentListItem
+    title="Management"
+    subtitle="Learn about the management features of the Daytona SDK."
+    href="/docs/python-sdk/daytona"
+  />
+  <DocumentListItem
+    title="File System"
+    subtitle="Learn about the file system features of the Daytona SDK."
+    href="/docs/python-sdk/file-system"
+  />
+  <DocumentListItem
+    title="Git Operations"
+    subtitle="Learn about the git features of the Daytona SDK."
+    href="/docs/python-sdk/git"
+  />
+  <DocumentListItem
+    title="Language Server Protocol"
+    subtitle="Learn about the language server protocol features of the Daytona SDK."
+    href="/docs/python-sdk/lsp-server"
+  />
+  <DocumentListItem
+    title="Process & Code Execution"
+    subtitle="Learn about the process and code execution features of the Daytona SDK."
+    href="/docs/python-sdk/process"
+  />
+  <DocumentListItem
+    title="Sandbox"
+    subtitle="Learn about the sandbox features of the Daytona SDK."
+    href="/docs/python-sdk/sandbox"
+  />
+</DocumentList>
+
+<DocumentList title="TypeScript SDK">
+  <DocumentListItem
+    title="Management"
+    subtitle="Learn about the management features of the TypeScript Daytona SDK."
+    href="/docs/typescript-sdk/daytona"
+  />
+  <DocumentListItem
+    title="File System"
+    subtitle="Learn about the file system features of the TypeScript Daytona SDK."
+    href="/docs/typescript-sdk/file-system"
+  />
+  <DocumentListItem
+    title="Git Operations"
+    subtitle="Learn about the git features of the TypeScript Daytona SDK."
+    href="/docs/typescript-sdk/git"
+  />
+  <DocumentListItem
+    title="Language Server Protocol"
+    subtitle="Learn about the language server protocol features of the TypeScript Daytona SDK."
+    href="/docs/typescript-sdk/lsp-server"
+  />
+  <DocumentListItem
+    title="Process & Code Execution"
+    subtitle="Learn about the process and code execution features of the TypeScript Daytona SDK."
+    href="/docs/typescript-sdk/process"
+  />
+  <DocumentListItem
+    title="Sandbox"
+    subtitle="Learn about the sandbox features of the TypeScript Daytona SDK."
+    href="/docs/typescript-sdk/sandbox"
+  />
+</DocumentList>
+
+---
+title: Sandbox Persistence
+---
+
+
+<Label>
+  Distribution: **Open Source**
+</Label>
+
+Daytona keeps the filesystem in its entirety during the sandbox lifecycle. The persistence functionality is built into the system, and nothing needs to be explicitly done from the user side.
+
+## Understanding Sandbox States
+
+It is important to understand the sandbox states to maintain cost-effectiveness. A sandbox can have three states during its lifecycle:
+
+### Running
+
+Running sandboxes utilize CPU, memory, and disk storage. Every resource is charged per second of usage. When sandboxes are not actively used, it is recommended that they be stopped. This can be done:
+
+- Manually using the stop command
+- Automatically by setting the autoStop interval
+
+### Stopped
+
+Stopped sandboxes only utilize disk storage. They can be instantly started when needed. The stopped state should be used when the sandbox is expected to be started again soon. Otherwise, it is recommended to archive the sandbox to eliminate disk usage costs.
+
+### Archived
+
+When sandboxes are archived, the entire filesystem state is moved to very cost-effective object storage, making it possible to keep sandboxes available for an extended period.
+
+## Performance Considerations
+
+The tradeoff between archived and stopped states is that starting an archived sandbox takes more time, depending on its size.
